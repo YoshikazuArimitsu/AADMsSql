@@ -1,2 +1,5 @@
 .terraform*
 .envrc
+terraform.*
+terraform.tfstat*
+private/
