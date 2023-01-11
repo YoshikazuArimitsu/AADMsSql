@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace EFMigrateExample
+namespace SQLDbExample
 {
     internal class Program
     {
@@ -16,8 +16,6 @@ namespace EFMigrateExample
                 .Build();
 
             var dbConfig = Configuration.Get<DbConfig>();
-
-
 
             using (var db = new BloggingContext(dbConfig))
             {
