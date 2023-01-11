@@ -9,17 +9,15 @@ DB にアクセスするサンプル
 
 - リソースグループ
 - SQL Database
-- SQL Database アクセス用の AzureAD アプリケーション・サービスプリンシパル
-- Storage Account
--
+- Storage Account/Blob コンテナ
+- DB/Storage アクセス用 AzureAD アプリケーション・サービスプリンシパル
+- サービスプリンシパル用の権限(Blob 共同作成者)割り当て
 
 ### 備考
 
-SQL Database は AD 認証のみ利用可能なので、Admin ユーザ・パスワード設定は意味ありません。
-
 DB 管理者の AD ユーザは別途作成しておく必要あり。
 
-terraform の実行プリンシパルに `アプリケーション管理者` を追加しておく必要がある。
+terraform で AzureAD にアプリ追加・RBAC 割り当てを行う為、実行プリンシパルに `アプリケーション管理者・所有者` を追加しておく必要がある。
 
 ## インフラ構築後の作業
 
@@ -52,18 +50,17 @@ cert.p12 は DB にアクセスするマシンの個人用証明書ストアに�
 
 ```json
 {
-  "ConnectionString": "Server=tcp:aritest-server.database.windows.net,1433;Initial Catalog=aritest-db;",
-  "ApplicationId": "3d4e99b3-28aa-4e11-8935-f378728eb96f",
-  "TenantId": "da4e5376-e590-44ac-b4f4-35c36df9aecb",
-  "CertificateIssuer": "yarimit"
+  "AADConfig": {
+    "ApplicationId": "cb6850e1-fcea-415b-93aa-da99ff2aff98",
+    "TenantId": "da4e5376-e590-44ac-b4f4-35c36df9aecb",
+    "CertificateIssuer": "yarimit"
+  }
 }
 ```
 
-ConnectionString に認証情報は不要。
-
 ApplicationId, TenantId に利用するサービスプリンシパルの ID、CertificateIssuer に証明書ストアから証明書を特定する為の Issuer を書いておく。
 
-サービスプリンシパルに証明書でログインを行い、AD トークンを受け取って SQL Database にサービスプリンシパルユーザでログインして DB を操作する。
+AzureAD サービスプリンシパルに証明書で認証を行い、AD トークンを受け取って SQL Database にサービスプリンシパルユーザでログインして DB/Storage を操作する。
 
 # 参考ページ
 

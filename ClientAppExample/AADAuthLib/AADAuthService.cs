@@ -1,7 +1,12 @@
 ﻿using Azure.Core;
 using Azure.Identity;
 using Microsoft.Identity.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AADAuthLib
 {
@@ -66,30 +71,6 @@ namespace AADAuthLib
         }
 
         /// <summary>
-        /// AD認証実行
-        /// </summary>
-        public async Task<AuthenticationResult> authorizeAsync(string scope)
-        {
-            var scopes = new[] { scope };
-            var app = ConfidentialClientApplicationBuilder
-                        .Create(Config.ApplicationId)
-                        .WithAuthority(AuthorityEndpoint)
-                        .WithCertificate(lookupCertificate())
-                        .Build();
-            return await app.AcquireTokenForClient(scopes).ExecuteAsync();
-        }
-
-        /// <summary>
-        /// 認証・アクセストークン取得
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string> GetAccessTokenAsync(string scope)
-        {
-            var authResult = await authorizeAsync(scope);
-            return authResult!.AccessToken;
-        }
-
-        /// <summary>
         /// Azure.Core用 TokenCredential 取得
         /// </summary>
         /// <returns></returns>
@@ -101,5 +82,20 @@ namespace AADAuthLib
                     lookupCertificate(),
                     new TokenCredentialOptions() { AuthorityHost = AuthorityEndpoint });
         }
+
+        /// <summary>
+        /// アクセストークン取得
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetAccessTokenAsync(string scope)
+        {
+            var cts = new CancellationTokenSource();
+
+            var accessToken = await GetTokenCredential().
+                GetTokenAsync(new TokenRequestContext(new[] { scope }), cts.Token);
+
+            return accessToken.Token;
+        }
+
     }
 }
