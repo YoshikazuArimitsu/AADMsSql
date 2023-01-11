@@ -61,7 +61,7 @@ namespace EFMigrateExample
             X509Certificate2Collection col_date = col_all.Find(X509FindType.FindByTimeValid, DateTime.Now, false);
 
             // Issuer で絞り込み
-            X509Certificate2Collection col_issuer = col_date.Find(X509FindType.FindByIssuerName, "Arimitsu", false);
+            X509Certificate2Collection col_issuer = col_date.Find(X509FindType.FindByIssuerName, Config.CertificateIssuer, false);
 
             if (col_issuer.Count == 0)
             {
