@@ -85,10 +85,10 @@ Azure AD にアプリケーション・サービスプリンシパルを登録�
 
 # 参考ページ
 
-https://ayuina.github.io/ainaba-csa-blog/sqldb-aad-authentication/
+[Azure SQL での Azure AD 認証を構成して管理する](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/authentication-aad-configure?view=azuresql&tabs=azure-powershell)
 
-https://learn.microsoft.com/ja-jp/azure/azure-sql/database/authentication-aad-configure?view=azuresql&tabs=azure-powershell
+[Azure Active Directory を使用して BLOB へのアクセスを認可する](https://learn.microsoft.com/ja-jp/azure/storage/blobs/authorize-access-azure-active-directory)
 
-https://learn.microsoft.com/ja-jp/azure/storage/blobs/authorize-access-azure-active-directory
+[Azure 組み込みロール](https://learn.microsoft.com/ja-jp/azure/role-based-access-control/built-in-roles#storage-blob-data-contributor)
 
-https://learn.microsoft.com/ja-jp/azure/role-based-access-control/built-in-roles#storage-blob-data-contributor
+[Azure SQL Database の Azure Active Directory 認証](https://ayuina.github.io/ainaba-csa-blog/sqldb-aad-authentication/)
