@@ -74,6 +74,11 @@ resource "azuread_service_principal" "msgraph" {
   use_existing   = true
 }
 
+resource "azuread_service_principal" "storage" {
+  application_id = data.azuread_application_published_app_ids.well_known.result.AzureStorage
+  use_existing   = true
+}
+
 resource "azuread_application" "mssql-app" {
   display_name     = "mssql_app"
   sign_in_audience = "AzureADMyOrg"
@@ -88,6 +93,23 @@ resource "azuread_application" "mssql-app" {
       type = "Scope"
     }
   }
+
+  required_resource_access {
+    # Azure Storage
+    resource_app_id = data.azuread_application_published_app_ids.well_known.result.AzureStorage
+
+    resource_access {
+      id   = "03e0da56-190b-40ad-a80c-ea378c433f7f"
+      type = "Scope"
+    }
+  }
+
+  public_client {
+    redirect_uris = [
+      "https://login.microsoftonline.com/common/oauth2/nativeclient",
+      "http://localhost"
+    ]
+  }
 }
 
 resource "azuread_service_principal" "mssql-app-sp" {
@@ -101,7 +123,6 @@ resource "azurerm_role_assignment" "blob_contributer" {
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azuread_service_principal.mssql-app-sp.id
 }
-
 
 output "mssqlapp_application_id" {
   value = azuread_application.mssql-app.application_id

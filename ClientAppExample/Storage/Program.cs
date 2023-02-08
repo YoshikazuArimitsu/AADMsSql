@@ -1,5 +1,6 @@
 ﻿using AADAuthLib;
 using Azure.Core;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -51,14 +52,22 @@ namespace StorageExample
 
             var config = Configuration.Get<StorageConfig>();
 
-            var auth = new AADAuthService(config.AADConfig);
+            var options = new InteractiveBrowserCredentialOptions
+            {
+                TenantId = config.AADConfig.TenantId,
+                ClientId = config.AADConfig.ApplicationId,
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
+                RedirectUri = new Uri("http://localhost"),
+            };
+            var interactiveCredential = new InteractiveBrowserCredential(options);
 
 
             string containerEndpoint = string.Format("https://{0}.blob.core.windows.net/{1}",
                                                         config.StorageAccount,
                                                         config.Container);
-            BlobContainerClient client = new BlobContainerClient(new Uri(containerEndpoint),
-                auth.GetTokenCredential());
+            BlobContainerClient client = new BlobContainerClient(new Uri(containerEndpoint)
+//                 , new InteractiveBrowserCredential());
+                 , interactiveCredential);
             
             client.CreateIfNotExists();
         }
