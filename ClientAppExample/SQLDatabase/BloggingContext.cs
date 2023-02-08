@@ -40,7 +40,7 @@ namespace SQLDbExample
         {
             SqlConnection connection = new SqlConnection();
             connection.ConnectionString = Config.ConnectionString;
-            connection.AccessToken = AADAuth.GetAccessTokenAsync("https://database.windows.net/.default").Result;
+            //connection.AccessToken = AADAuth.GetAccessTokenAsync("https://database.windows.net/.default").Result;
             options.UseSqlServer(connection);
         }
     }
